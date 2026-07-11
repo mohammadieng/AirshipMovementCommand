@@ -7,13 +7,10 @@ Getting a stable, bird’s-eye view of a site (farm, construction, field survey)
 How I solved it:
 I built an autonomous blimp that holds position using pure visual odometry — no external positioning needed. Here’s the short technical recipe:
 
-    Perception: ORB feature detection (lightweight, real-time) + FLANN matching with Lowe’s ratio test to track the ground across frames.
-
-    Motion estimation: A homography matrix captures how the ground plane shifts; from that, I extract drift.
-
-    Noise handling: A Kalman filter fuses prediction (velocity model) and measurements. When features fail (bland surfaces), it falls back on prediction alone — no freakouts.
-
-    Smoothing & control: A moving average over the last 30 positions reduces jitter, then a simple error signal (dx, dy) feeds a PID controller that commands left/right/up/down to keep the blimp over the target.
+- Perception: ORB feature detection (lightweight, real-time) + FLANN matching with Lowe’s ratio test to track the ground across frames.
+- Motion estimation: A homography matrix captures how the ground plane shifts; from that, I extract drift.
+- Noise handling: A Kalman filter fuses prediction (velocity model) and measurements. When features fail (bland surfaces), it falls back on prediction alone — no freakouts.
+- Smoothing & control: A moving average over the last 30 positions reduces jitter, then a simple error signal (dx, dy) feeds a PID controller that commands left/right/up/down to keep the blimp over the target.
 
 The result? The blimp builds a “mental map” of its drift and corrects itself in real time, using just one camera. 🧠
 
